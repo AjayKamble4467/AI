@@ -1,0 +1,37 @@
+!pip install nltk
+!pip install chatterbot==1.0.4
+!pip uninstall PyYaml
+!pip install -U PyYaml==3.12
+
+import collections.abc
+collections.Hashable = collections.abc.Hashable
+
+from chatterbot import ChatBot
+from spacy.lang.en import English
+import spacy.cli
+spacy.cli.download("en_core_web_md")
+bot = ChatBot(
+    'RSCOE',
+    logic_adapters=[
+        'chatterbot.logic.BestMatch',
+        'chatterbot.logic.TimeLogicAdapter'],
+)
+
+
+!pip install chatterbot_corpus
+from chatterbot.trainers import ChatterBotCorpusTrainer
+trainer = ChatterBotCorpusTrainer(bot)
+trainer.train('/content/computers.yml')
+name=input("Enter Your Name: ")
+print("Hi "+name+", how can I help you?")
+while True:
+    request=input(name+':')
+    if request=='Bye' or request =='bye':
+        print('RSCOE: Bye')
+        break
+    else:
+        response=bot.get_response(request)
+        # get_reponses() is a method of chatbot instance
+        print('RSCOE:',response)
+
+
